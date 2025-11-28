@@ -1,0 +1,92 @@
+
+ Lab 2 — Networking & Packet Capture (Wireshark)
+
+ Resolved Host IP
+Command used:
+    dig +short streamhive.42web.io
+
+Resolved IP:
+    185.27.134.119
+
+
+
+Active Network Interface
+Command used:
+    ip addr show
+
+Interface used for tcpdump capture:
+    wlan0
+
+  Traffic Capture
+Tcpdump command used:
+    sudo tcpdump -i wlan0 host 185.27.134.119 -w lab2_streamhive.pcap
+
+Traffic generated using:
+    curl -vk https://streamhive.42web.io/
+
+(Also optionally accessed in Firefox.)
+
+
+
+ Wireshark Filters Used
+
+Show TCP packets:
+    tcp
+
+Show packets to/from the target IP:
+    ip.addr == 185.27.134.119
+
+ Show TLS handshake:
+    tls
+
+Show ClientHello:
+    tls.handshake.type == 1
+
+Show SYN (start of TCP handshake):
+    tcp.flags.syn == 1 && tcp.flags.ack == 0
+
+
+
+Optional TLS Decryption (if used)
+Commands:
+    export SSLKEYLOGFILE=~/sslkeys.log
+    firefox &
+
+Wireshark configuration:
+    Preferences → Protocols → TLS →
+    (Pre)-Master-Secret log filename:
+        /home/<yourusername>/sslkeys.log
+
+Deliverables Included
+
+lab2_streamhive.pcap
+Full packet capture created using tcpdump.
+
+ annotation.md
+10 annotated packets, including:
+- TCP 3-way handshake (SYN, SYN/ACK, ACK)
+- ClientHello
+- ServerHello
+- Certificate
+- TLS Application Data
+
+✔ screenshots
+Contains:
+- handshake.png (TCP handshake)
+- clienthello.png (TLS ClientHello packet)
+- cert.png (TLS Certificate message)
+
+ ✔ report.pdf
+300–500 word explanation including:
+- TCP handshake packet numbers
+- TLS handshake packet numbers
+- Description of encrypted traffic
+- Summary of network flow
+
+
+
+ Notes
+- All traffic was generated exclusively from the Kali laptop.
+- Only normal GET requests were made (per lab rules).
+- No scanning or unauthorized probing was performed.
+
